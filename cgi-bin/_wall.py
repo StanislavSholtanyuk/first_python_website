@@ -12,7 +12,7 @@ class Wall:
     COOKIES = 'cgi-bin/cookies.json'
 
     def __init__(self):
-        """Создаём начальные файлы, если они не созданы"""
+        """Creating initial files, if they don't exist yet"""
         try:
             with open(self.USERS, 'r', encoding='utf-8'):
                 pass
@@ -35,9 +35,9 @@ class Wall:
                 json.dump({}, f)
 
     def register(self, user, password):
-        """Регистриует пользователя. Возвращает True при успешной регистрации"""
+        """Signing up a user. Returns True if succeeded"""
         if self.find(user):
-            return False  # Такой пользователь существует
+            return False  # This user already exists
         with open(self.USERS, 'r', encoding='utf-8') as f:
             users = json.load(f)
         users[user] = password
@@ -46,23 +46,23 @@ class Wall:
         return True
 
     def set_cookie(self, user):
-        """Записывает куку в файл. Возвращает созданную куку."""
+        """Writing cookie into a file. This cookie is returned"""
         with open(self.COOKIES, 'r', encoding='utf-8') as f:
             cookies = json.load(f)
-        cookie = str(time.time()) + str(random.randrange(10**14))  # Генерируем уникальную куку для пользователя
+        cookie = str(time.time()) + str(random.randrange(10**14))  # Generating a unique cookie for the user
         cookies[cookie] = user
         with open(self.COOKIES, 'w', encoding='utf-8') as f:
             json.dump(cookies, f)
         return cookie
 
     def find_cookie(self, cookie):
-        """По куке находит имя пользователя"""
+        """Searching for the user by a cookie"""
         with open(self.COOKIES, 'r', encoding='utf-8') as f:
             cookies = json.load(f)
         return cookies.get(cookie)
 
     def find(self, user, password=None):
-        """Ищет пользователя по имени или по имени и паролю"""
+        """Searching for the user by name or name w/ password"""
         with open(self.USERS, 'r', encoding='utf-8') as f:
             users = json.load(f)
         if user in users and (password is None or password == users[user]):
@@ -70,7 +70,7 @@ class Wall:
         return False
 
     def publish(self, user, text):
-        """Публикует текст"""
+        """Publish a text"""
         with open(self.WALL, 'r', encoding='utf-8') as f:
             wall = json.load(f)
         wall['posts'].append({'user': user, 'text': text})
@@ -78,7 +78,7 @@ class Wall:
             json.dump(wall, f)
 
     def html_list(self):
-        """Список постов для отображения на странице"""
+        """List posts for displaying on page"""
         with open(self.WALL, 'r', encoding='utf-8') as f:
             wall = json.load(f)
         posts = []
