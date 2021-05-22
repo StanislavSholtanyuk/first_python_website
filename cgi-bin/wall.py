@@ -16,7 +16,7 @@ cookie = http.cookies.SimpleCookie(os.environ.get("HTTP_COOKIE"))
 session = cookie.get("session")
 if session is not None:
     session = session.value
-user = wall.find_cookie(session)  # Ищем пользователя по переданной куке
+user = wall.find_cookie(session)  # Searching for the user by his or her cookie
 
 form = cgi.FieldStorage()
 action = form.getfirst("action", "")
@@ -35,8 +35,8 @@ elif action == "login":
         cookie = wall.set_cookie(login)
         print('Set-cookie: session={}'.format(cookie))
     elif wall.find(login):
-        #pass  # А надо бы предупреждение выдать
-        print("Неверный пароль типа...")
+        #pass  # Warning is here...
+        print("Kinda wrong password...")
     else:
         wall.register(login, password)
         cookie = wall.set_cookie(login)
@@ -50,10 +50,10 @@ pattern = '''
 <title>Стена</title>
 </head>
 <body>
-    Форма логина и регистрации. При вводе несуществующего имени зарегистрируется новый пользователь.
+    Sign in / sign up. When a new username is submitted, the new user is signed up
     <form action="/cgi-bin/wall.py">
-        Логин: <input type="text" name="login">
-        Пароль: <input type="password" name="password">
+        Username: <input type="text" name="login">
+        Password: <input type="password" name="password">
         <input type="hidden" name="action" value="login">
         <input type="submit">
     </form>
